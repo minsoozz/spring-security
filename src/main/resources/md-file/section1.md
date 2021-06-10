@@ -1,8 +1,8 @@
-#스프링 시큐리티 기본 API 및 Filter 이해
+# 스프링 시큐리티 기본 API 및 Filter 이해
 
 - - - 
 
-##프로젝트 구성 및 의존성 추가
+## 프로젝트 구성 및 의존성 추가
 
 ~~~
 <dependency>
@@ -26,9 +26,9 @@
 1. 계정 추가, 권한 추가, DB연동 등
 2. 기본적인 보안 기능 외에 시스템에서 필요로 하는 더 세부적이고 추가적인 보안 기능이 필요
 
-##사용자 정의 보안 기능 구현
+## 사용자 정의 보안 기능 구현
 ![img.png](img.png)
-###SecurityConfig 설정
+### SecurityConfig 설정
 
 ~~~
   @Configuration
@@ -45,10 +45,10 @@
     }
 ~~~
 
-####WebSecurityConfigurerAdapter를 상속받은 SecurityConfig 클래스에서는 사용자가 직접 보안 설정을 정의 할 수 있다
-###Form 인증
+#### WebSecurityConfigurerAdapter를 상속받은 SecurityConfig 클래스에서는 사용자가 직접 보안 설정을 정의 할 수 있다
+### Form 인증
 ![img_1.png](img_1.png)
-####클라이언트와 서버간의 관계속에서 스프링 시큐리티가 인증처리 프로세스
+#### 클라이언트와 서버간의 관계속에서 스프링 시큐리티가 인증처리 프로세스
 1. 사용자가 GET방식으로 /home 자원에 접근한다
 2. 사용자가 인증을 받지 않은 경우 로그인 페이지로 리다이렉트 (실패)
 3. POST 방식으로 인증을 시도 (성공)
@@ -56,7 +56,7 @@
 5. 인증을 받은 이후 /home 자원에 접근을 시도하면 스프링 시큐리티는 사용자가 가진 세션으로부터 토큰의 존재여부를 판단 후 자원에 접근한다, 스프링 시큐리티는 세션에 저장된
    인증토큰이 있다면 사용자가 인증된 사용자라고 판단하고 인증을 유지한다
 
-###Form Login 인증 API
+### Form Login 인증 API
 
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
@@ -73,9 +73,9 @@ protected void configure(HttpSecurity http) throws Exception {
 }
 ~~~
 
-##UsernamePasswordAuthenticationFilter
+## UsernamePasswordAuthenticationFilter
 ![img_2.png](img_2.png)
-####인증처리를 담당하고 인증처리에 요청을 처리하는 필터가 UsernamePasswordAuthenticationFilter이다 내부적으로 각각의 인증처리의 역할을 통해 인증처리를 하게 된다
+#### 인증처리를 담당하고 인증처리에 요청을 처리하는 필터가 UsernamePasswordAuthenticationFilter이다 내부적으로 각각의 인증처리의 역할을 통해 인증처리를 하게 된다
 1. 사용자가 Request
 2. 사용자의 요청정보를 UsernamePasswordAuthenticationFilter가 확인한다
 3. AntPathRequestMatcher가 요청 정보가 매칭되는지 확인한다
@@ -89,5 +89,5 @@ protected void configure(HttpSecurity http) throws Exception {
 11. Filter는 인증을 처리한 이후에 Authentication 객체를 전달받고 인증 객체를 SecurityContext에 저장한다(인증 객체 저장소, 전역으로 Authentication 객체를 참조 가능)
 12. SuccessHandler에서 인증 성공 이후 작업를 진행
 
-####크게 인증을 하기 전 작업 , 인증 후 작업으로 나뉘는데 그 분기점은 AuthenticationManager이다.
+#### 크게 인증을 하기 전 작업 , 인증 후 작업으로 나뉘는데 그 분기점은 AuthenticationManager이다.
 
