@@ -47,7 +47,7 @@
 
 #### WebSecurityConfigurerAdapter를 상속받은 SecurityConfig 클래스에서는 사용자가 직접 보안 설정을 정의 할 수 있다
 ## Form Login 인증
-- - -
+
 ![img_1.png](../images/img_1.png)
 #### 클라이언트와 서버간의 관계속에서 스프링 시큐리티가 인증처리 프로세스
 1. 사용자가 GET방식으로 /home 자원에 접근한다
@@ -134,7 +134,7 @@ protected void configure(HttpSecurity http) throws Exception {
 #### JSESSIONID가 없더라도 스프링 시큐리티에서는 Remember-Me 쿠키가 있다면 다시 인증을 시도하고 JSESSIONID를 다시 생성한다
 
 ## RememberMeAuthenticationFilter
-- - -
+
 ![Remember-Me.png](../images/remember-me.png)
 ### RememberMeAuthenticationFilter가 정상적으로 작동하는 조건
 1. 인증객체가 없는 경우
