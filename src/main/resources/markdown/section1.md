@@ -25,7 +25,7 @@
 
 ## 사용자 정의 보안 기능 구현
 - - - 
-![img.png](../md-images/img.png)
+![img.png](../images/img.png)
 ### SecurityConfig 설정
 
 ~~~
@@ -46,7 +46,7 @@
 #### WebSecurityConfigurerAdapter를 상속받은 SecurityConfig 클래스에서는 사용자가 직접 보안 설정을 정의 할 수 있다
 ## Form Login 인증
 - - -
-![img_1.png](../md-images/img_1.png)
+![img_1.png](../images/img_1.png)
 #### 클라이언트와 서버간의 관계속에서 스프링 시큐리티가 인증처리 프로세스
 1. 사용자가 GET방식으로 /home 자원에 접근한다
 2. 사용자가 인증을 받지 않은 경우 로그인 페이지로 리다이렉트 (실패)
@@ -74,7 +74,7 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ## UsernamePasswordAuthenticationFilter
 - - - 
-![img_2.png](../md-images/img_2.png)
+![img_2.png](../images/img_2.png)
 
 #### 인증처리를 담당하고 인증처리에 요청을 처리하는 필터가 UsernamePasswordAuthenticationFilter이다 내부적으로 각각의 인증처리의 역할을 통해 인증처리를 하게 된다
 1. 사용자가 Request
@@ -94,7 +94,7 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ## Logout 처리, LogoutFilter
 - - - 
-![logout.png](../md-images/logout.png)
+![logout.png](../images/logout.png)
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
 	 http.logout()						// 로그아웃 처리
@@ -133,7 +133,7 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ## RememberMeAuthenticationFilter
 - - -
-![Remember-Me.png](../md-images/Remember-Me.png)
+![Remember-Me.png](../images/Remember-Me.png)
 ### RememberMeAuthenticationFilter가 정상적으로 작동하는 조건
 1. 인증객체가 없는 경우
 2. 사용자가 Remember-Me 쿠키를 가지고 오는 경우
@@ -154,4 +154,15 @@ protected void configure(HttpSecurity http) throws Exception {
 7. 새로운 Authentication 객체를 생성한다
 8. Authentication 인증 객체를 AuthenticationManager 에게 전달하여 인증 처리를 하게 된다
 
-j
+
+## AnonymousAuthenticationFilter
+- - - 
+![anonymous.png](../images/anonymous.png)
+1. 사용자가 요청한다
+2. AnonymousAuthenticationFilter가 요청을 받는다
+3. 현재 요청한 사용자가 SecurityContext에 저장되어 있는 인증 객체가 존재하는지를 판단
+- 인증 객체가 존재하면 다음 필터로 이동한다
+4. 인증 객체가 존재하지 않는 경우 인증을 거치지 않은 사용자로(익명 사용자) 판단하고 AnonymousAuthenticationToken(익명 객체) 생성
+5. SecurityContext에 AnonymousAuthenticationToken를 저장
+
+#### AnonymousAuthenticationFilter는 익명 사용자라고 판단하고 익명 사용자용 토큰을 만들어서 인증 사용자와의 구분을 위함
