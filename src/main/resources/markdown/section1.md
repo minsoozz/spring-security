@@ -24,7 +24,7 @@
 2. 기본적인 보안 기능 외에 시스템에서 필요로 하는 더 세부적이고 추가적인 보안 기능이 필요
 
 ## 사용자 정의 보안 기능 구현
-- - - 
+
 ![img.png](../images/img.png)
 ### SecurityConfig 설정
 
@@ -73,7 +73,7 @@ protected void configure(HttpSecurity http) throws Exception {
 ~~~
 
 ## UsernamePasswordAuthenticationFilter
-- - - 
+
 ![img_2.png](../images/img_2.png)
 
 #### 인증처리를 담당하고 인증처리에 요청을 처리하는 필터가 UsernamePasswordAuthenticationFilter이다 내부적으로 각각의 인증처리의 역할을 통해 인증처리를 하게 된다
@@ -93,7 +93,7 @@ protected void configure(HttpSecurity http) throws Exception {
 ####크게 인증을 하기 전 작업 , 인증 후 작업으로 나뉘는데 그 분기점은 AuthenticationManager이다.
 
 ## Logout 처리, LogoutFilter
-- - - 
+
 ![logout.png](../images/logout.png)
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
@@ -112,7 +112,7 @@ protected void configure(HttpSecurity http) throws Exception {
 5. 로그아웃이 성공하면 SimpleUrlLogoutSuccessHandler를 호출에 로그인 페이지로 이동하도록 한다
 
 ## Remember Me 인증
-- - - 
+
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
 	http.rememberMe()
@@ -133,7 +133,7 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ## RememberMeAuthenticationFilter
 - - -
-![Remember-Me.png](../images/Remember-Me.png)
+![Remember-Me.png](../images/remember-me.png)
 ### RememberMeAuthenticationFilter가 정상적으로 작동하는 조건
 1. 인증객체가 없는 경우
 2. 사용자가 Remember-Me 쿠키를 가지고 오는 경우
@@ -156,7 +156,7 @@ protected void configure(HttpSecurity http) throws Exception {
 
 
 ## AnonymousAuthenticationFilter
-- - - 
+
 ![anonymous.png](../images/anonymous.png)
 1. 사용자가 요청한다
 2. AnonymousAuthenticationFilter가 요청을 받는다
