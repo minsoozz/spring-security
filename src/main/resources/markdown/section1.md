@@ -154,3 +154,4 @@ protected void configure(HttpSecurity http) throws Exception {
 7. 새로운 Authentication 객체를 생성한다
 8. Authentication 인증 객체를 AuthenticationManager 에게 전달하여 인증 처리를 하게 된다
 
+j
