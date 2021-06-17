@@ -1,6 +1,5 @@
 # 스프링 시큐리티 기본 API 및 Filter 이해
 
-
 ## 프로젝트 구성 및 의존성 추가
 
 ~~~
@@ -28,6 +27,7 @@
 ## 사용자 정의 보안 기능 구현
 
 ![img.png](../images/img.png)
+
 ### SecurityConfig 설정
 
 ~~~
@@ -46,10 +46,13 @@
 ~~~
 
 #### WebSecurityConfigurerAdapter를 상속받은 SecurityConfig 클래스에서는 사용자가 직접 보안 설정을 정의 할 수 있다
+
 ## Form Login 인증
 
 ![img_1.png](../images/img_1.png)
+
 #### 클라이언트와 서버간의 관계속에서 스프링 시큐리티가 인증처리 프로세스
+
 1. 사용자가 GET방식으로 /home 자원에 접근한다
 2. 사용자가 인증을 받지 않은 경우 로그인 페이지로 리다이렉트 (실패)
 3. POST 방식으로 인증을 시도 (성공)
@@ -79,24 +82,27 @@ protected void configure(HttpSecurity http) throws Exception {
 ![img_2.png](../images/img_2.png)
 
 #### 인증처리를 담당하고 인증처리에 요청을 처리하는 필터가 UsernamePasswordAuthenticationFilter이다 내부적으로 각각의 인증처리의 역할을 통해 인증처리를 하게 된다
+
 1. 사용자가 Request
 2. 사용자의 요청정보를 UsernamePasswordAuthenticationFilter가 확인한다
 3. AntPathRequestMatcher가 요청 정보가 매칭되는지 확인한다
 4. 매칭이 되면 인증처리, 매칭이 되지 않으면 필터로 이동한다
 5. Authentication 객체를 생성해서 사용자가 로그인 할 때 입력한 정보를 저장한다
-6. AuthenticationManager (인증관리자) 가  필터로부터 인증 객체를 전달 받고 인증을 하게 된다
+6. AuthenticationManager (인증관리자) 가 필터로부터 인증 객체를 전달 받고 인증을 하게 된다
 7. AuthenticationProvider에게 인증을 위임한다 (실질적으로 인증을 하는 클래스)
 8. 인증이 실패하면 AuthenticationException (인증예외) 를 발생시켜 다시 필터가 받아 예외 후속작업을 실행
 9. 인증이 성공하면 Authentication 객체를 생성해서 AuthenticationManager에게 리턴한다
 10. AuthenticationManager는 전달받은 인증 객체를 다시 Filter 에게 리턴한다
-11. Filter는 인증을 처리한 이후에 Authentication 객체를 전달받고 인증 객체를 SecurityContext에 저장한다(인증 객체 저장소, 전역으로 Authentication 객체를 참조 가능)
+11. Filter는 인증을 처리한 이후에 Authentication 객체를 전달받고 인증 객체를 SecurityContext에 저장한다(인증 객체 저장소, 전역으로
+    Authentication 객체를 참조 가능)
 12. SuccessHandler에서 인증 성공 이후 작업를 진행
 
-####크게 인증을 하기 전 작업 , 인증 후 작업으로 나뉘는데 그 분기점은 AuthenticationManager이다.
+#### 크게 인증을 하기 전 작업 , 인증 후 작업으로 나뉘는데 그 분기점은 AuthenticationManager이다.
 
 ## Logout 처리, LogoutFilter
 
 ![logout.png](../images/logout.png)
+
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
 	 http.logout()						// 로그아웃 처리
@@ -107,10 +113,12 @@ protected void configure(HttpSecurity http) throws Exception {
              .logoutSuccessHandler(logoutSuccessHandler()) 	// 로그아웃 성공 후 핸들러
 }
 ~~~
+
 1. 클라이언트가 POST 방식으로 로그아웃 요청
 2. AntPathRequestMatcher가 로그아웃 요청을 확인한다
 3. 일치하면 인증객체를 담고 있는 SecurityContext를 Authentication로 꺼내온다
-4. SecurityContextLogoutHandler가 세션 무효화, 쿠키 삭제, 인증 객체 NULL 처리, securityContext.clearContext() 컨텍스트에서 정보를 삭제
+4. SecurityContextLogoutHandler가 세션 무효화, 쿠키 삭제, 인증 객체 NULL 처리, securityContext.clearContext() 컨텍스트에서
+   정보를 삭제
 5. 로그아웃이 성공하면 SimpleUrlLogoutSuccessHandler를 호출에 로그인 페이지로 이동하도록 한다
 
 ## Remember Me 인증
@@ -124,9 +132,11 @@ protected void configure(HttpSecurity http) throws Exception {
 		.userDetailsService(userDetailsService)
 }
 ~~~
+
 1. 세션이 만료되고 웹 브라우저가 종료된 후에도 어플리케이션이 사용자를 기억하는 기능
 2. Remember-Me 쿠키에 대한 Http 요청을 확인한 후 토큰 기반 인증을 사용해 유효성을 검사하고 토큰이 검증되면 사용자는 로그인 된다
 3. 사용자 라이프 사이클
+
 - 인증 성공 (Remember-Me 쿠키 설정)
 - 인증 실패 (쿠키가 존재하면 쿠키 무효화)
 - 로그아웃 (쿠키가 존재하면 쿠키 무효화)
@@ -135,36 +145,125 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ## RememberMeAuthenticationFilter
 
-![Remember-Me.png](../images/remember-me.png)
+![remember_me.png](../images/remember_me.png)
+
 ### RememberMeAuthenticationFilter가 정상적으로 작동하는 조건
+
 1. 인증객체가 없는 경우
 2. 사용자가 Remember-Me 쿠키를 가지고 오는 경우
-####RememberMeAuthenticationFilter가 요청을 처리하는 조건은 Authentication이 NULL일 경우이다
-####ex) 사용자의 세션이 만료되었거나 브라우저가 종료되어 시큐리티 컨텍스트를 찾지 못하는 경우
+
+#### RememberMeAuthenticationFilter가 요청을 처리하는 조건은 Authentication이 NULL일 경우이다
+
+#### ex) 사용자의 세션이 만료되었거나 브라우저가 종료되어 시큐리티 컨텍스트를 찾지 못하는 경우
 
 ### Remember-Me 인증 절차
+
 1. Remember-Me를 가지고 있는 세션이 만료된 사용자가 요청
-2. RememberMeAuthenticationFilter가 동작한다 
+2. RememberMeAuthenticationFilter가 동작한다
 3. RememberMeService가 인증을 시도 (각 구현체가 Remember-me 인증 처리 역할을 한다)
+
 - TokenBasedRememberMeServices 토큰을 비교해서 인증처리
 - PersistentTokenBasedRememberMeServices DB에 저장한 토큰을 비교해서 인증처리
+
 4. RememberMeService가 토큰을 추출한다
 5. Decode Token(정상 유무 판단) 토큰의 일치여부를 확인한다
+
 - 정상이 아닐 경우 예외 발생
+
 6. 토큰에 포함된 User 정보를 통해 현재 DB에 저장된 User를 조회하여 해당 쿠키에 포함된 유저에 해당하는지를 확인한다
+
 - User 계정이 존재하지 않을 경우 예외 발생
+
 7. 새로운 Authentication 객체를 생성한다
 8. Authentication 인증 객체를 AuthenticationManager 에게 전달하여 인증 처리를 하게 된다
-
 
 ## AnonymousAuthenticationFilter
 
 ![anonymous.png](../images/anonymous.png)
+
 1. 사용자가 요청한다
 2. AnonymousAuthenticationFilter가 요청을 받는다
 3. 현재 요청한 사용자가 SecurityContext에 저장되어 있는 인증 객체가 존재하는지를 판단
+
 - 인증 객체가 존재하면 다음 필터로 이동한다
+
 4. 인증 객체가 존재하지 않는 경우 인증을 거치지 않은 사용자로(익명 사용자) 판단하고 AnonymousAuthenticationToken(익명 객체) 생성
 5. SecurityContext에 AnonymousAuthenticationToken를 저장
 
 #### AnonymousAuthenticationFilter는 익명 사용자라고 판단하고 익명 사용자용 토큰을 만들어서 인증 사용자와의 구분을 위함
+
+## 동시 세션 제어, 세션 고정 보호, 세션 정책
+
+![session.png](../images/session.png)
+
+~~~
+protected void configure(HttpSecurity http) throws Exception {     
+http.sessionManagement()
+        .maximumSessions(1)                 // 최대 허용 가능 세션 수 , -1 : 무제한 로그인 세션 허용
+        .maxSessionsPreventsLogin(true) // 동시 로그인 차단함,  false : 기존 세션 만료(default)
+        .invalidSessionUrl("/invalid")       // 세션이 유효하지 않을 때 이동 할 페이지
+        .expiredUrl("/expired ")  	        // 세션이 만료된 경우 이동 할 페이지
+}
+~~~
+
+### 동시 세션 제어 전략
+
+1. 이전 사용자 세션 만료
+2. 현재 사용자 인증 실패
+
+### 세션 고정 보호
+
+![session2.png](../images/session2.png)
+
+~~~
+protected void configure(HttpSecurity http) throws Exception {
+	http.sessionManagement()
+          .sessionFixation().changeSessionId() // 기본값
+                                                     // none, migrateSession, newSession
+}
+~~~
+
+사용자가 비록 공격자가 심어놓은 쿠키로 로그인을 시도하더라도 인증할 때 마다 새로운 세션이 생성되고 새로운 쿠키가 생성되어 보호한다
+
+### 세션 정책
+
+~~~
+protected void configure(HttpSecurity http) throws Exception {
+	http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy. If_Required )
+}
+~~~
+
+- SessionCreationPolicy. Always        :  스프링 시큐리티가 항상 세션 생성
+- SessionCreationPolicy. If_Required    :  스프링 시큐리티가 필요 시 생성(기본값)
+- SessionCreationPolicy. Never        :  스프링 시큐리티가 생성하지 않지만 이미 존재하면 사용
+- SessionCreationPolicy. Stateless        :  스프링 시큐리티가 생성하지 않고 존재해도 사용하지 않음
+
+## 세션 제어 필터
+![session_management_filter.png](../images/session_management_filter.png)
+### SessionManagementFilter의 기능과 역할
+
+1. 세션 관리
+
+- 인증 시 사용자의 세션정보를 등록,조회 삭제 등의 세션 이력을 관리
+
+2. 동시적 세션 제어
+
+- 동일 계정으로 접속이 허용되는 최대 세션수를 제한
+
+3. 세션 고정 보호
+
+- 인증 할 때마다 세션쿠키글 새로 발급하여 공격자의 쿠키 조작을 방지
+
+4. 세션 생성 정책
+
+- Always. if_Required, Never, Stateless
+
+### ConcurrentSessionFilter
+
+1. 매 요청마다 현재 사용자의 세션 만료 여부 체크
+2. 세션이 만료되었을 경우 즉시 만료 처리
+
++ session.isExpired() == true
+    + 로그아웃 처리
+    + 즉시 오류 페이지 응답 ("This session has been expired")
