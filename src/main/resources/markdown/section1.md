@@ -223,7 +223,7 @@ protected void configure(HttpSecurity http) throws Exception {
 }
 ~~~
 
-사용자가 비록 공격자가 심어놓은 쿠키로 로그인을 시도하더라도 인증할 때 마다 새로운 세션이 생성되고 새로운 쿠키가 생성되어 보호한다
+사용자는 공격자가 심어놓은 쿠키로 로그인을 시도하더라도 인증할 때 마다 새로운 세션이 생성되고 새로운 쿠키가 생성되어 보호한다
 
 ### 세션 정책
 
@@ -240,7 +240,7 @@ protected void configure(HttpSecurity http) throws Exception {
 - SessionCreationPolicy. Stateless        :  스프링 시큐리티가 생성하지 않고 존재해도 사용하지 않음
 
 ## 세션 제어 필터
-![session_management_filter.png](../images/session_management_filter.png)
+![session_management_filter1.png](../images/session_management_filter1.png)
 ### SessionManagementFilter의 기능과 역할
 
 1. 세션 관리
@@ -267,3 +267,33 @@ protected void configure(HttpSecurity http) throws Exception {
 + session.isExpired() == true
     + 로그아웃 처리
     + 즉시 오류 페이지 응답 ("This session has been expired")
+    
+![session_management_filter2.png](../images/session_management_filter2.png)
+
+## 권한 설정 및 표현식
+~~~
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+        http
+        .antMatcher(“/shop/**”)
+        .authorizeRequests()
+        .antMatchers(“/shop/login”, “/shop/users/**”).permitAll()
+	    .antMatchers(“/shop/mypage”).hasRole(“USER”)
+        .antMatchers("/shop/admin/pay").access("hasRole('ADMIN')")
+	    .antMatchers("/shop/admin/**").access("hasRole('ADMIN') or hasRole(‘SYS ')");
+        .anyRequest().authenticated()
+}
+// 주의 사항 - 설정 시 구체적인 경로가 먼저 오고 그것 보다 큰 범위의 경로가 뒤에 오도록 해야 한다
+~~~
+
+1. 선언적 방식
+- URL
+    - http.antMatchers("/users/**").hasRole("USER")
+- Method
+    - @PreAuthorize(“hasRole(‘USER’)”)
+      public void user(){ System.out.println(“user”)}
+      
+2. 동적 방식 - DB 연동 프로그래밍
+- URI
+- Method
+
