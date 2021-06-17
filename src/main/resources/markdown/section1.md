@@ -31,17 +31,17 @@
 ### SecurityConfig 설정
 
 ~~~
-  @Configuration
-  @EnableWebSecurity
-  public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception { 
-      http
-          .authorizeRequests()
-          .anyRequest().authenticated()
-          .and()
-          .formLogin();
+@Override
+protected void configure(HttpSecurity http) throws Exception { 
+            http
+            .authorizeRequests()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin();
     }
 ~~~
 
@@ -64,8 +64,8 @@
 
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
-         http
-         formLogin()
+            http
+            formLogin()
             .loginPage(“/login.html") // 사용자 정의 로그인 페이지
             .defaultSuccessUrl("/home) // 로그인 성공 후 이동 페이지
             .failureUrl(＂/login.html?error=true“) // 로그인 실패 후 이동 페이지
@@ -105,12 +105,12 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
-	 http.logout()						// 로그아웃 처리
-             .logoutUrl(＂/logout＂)				// 로그아웃 처리 URL
-	         .logoutSuccessUrl(＂/login＂)			// 로그아웃 성공 후 이동페이지
-             .deleteCookies(＂JSESSIONID“, ＂Remember-Me＂) 	// 로그아웃 후 쿠키 삭제
-	         .addLogoutHandler(logoutHandler())		 // 로그아웃 핸들러
-             .logoutSuccessHandler(logoutSuccessHandler()) 	// 로그아웃 성공 후 핸들러
+            http.logout()						// 로그아웃 처리
+            .logoutUrl(＂/logout＂)				// 로그아웃 처리 URL
+            .logoutSuccessUrl(＂/login＂)			// 로그아웃 성공 후 이동페이지
+            .deleteCookies(＂JSESSIONID“, ＂Remember-Me＂) 	// 로그아웃 후 쿠키 삭제
+            .addLogoutHandler(logoutHandler())		 // 로그아웃 핸들러
+            .logoutSuccessHandler(logoutSuccessHandler()) 	// 로그아웃 성공 후 핸들러
 }
 ~~~
 
@@ -125,11 +125,11 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
-	http.rememberMe()
-		.rememberMeParameter("remember") // 기본 파라미터명은 Remember-Me
-		.tokenValiditySeconds(3600) // Default 는 14일
-		.alwaysRemember(true) // 리멤버 미 기능이 활성화되지 않아도 항상 실행
-		.userDetailsService(userDetailsService)
+            http.rememberMe()
+            .rememberMeParameter("remember") // 기본 파라미터명은 Remember-Me
+            .tokenValiditySeconds(3600) // Default 는 14일
+            .alwaysRemember(true) // 리멤버 미 기능이 활성화되지 않아도 항상 실행
+            .userDetailsService(userDetailsService)
 }
 ~~~
 
@@ -198,11 +198,11 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ~~~
 protected void configure(HttpSecurity http) throws Exception {     
-http.sessionManagement()
-        .maximumSessions(1)                 // 최대 허용 가능 세션 수 , -1 : 무제한 로그인 세션 허용
-        .maxSessionsPreventsLogin(true) // 동시 로그인 차단함,  false : 기존 세션 만료(default)
-        .invalidSessionUrl("/invalid")       // 세션이 유효하지 않을 때 이동 할 페이지
-        .expiredUrl("/expired ")  	        // 세션이 만료된 경우 이동 할 페이지
+            http.sessionManagement()
+            .maximumSessions(1)                 // 최대 허용 가능 세션 수 , -1 : 무제한 로그인 세션 허용
+            .maxSessionsPreventsLogin(true) // 동시 로그인 차단함,  false : 기존 세션 만료(default)
+            .invalidSessionUrl("/invalid")       // 세션이 유효하지 않을 때 이동 할 페이지
+            .expiredUrl("/expired ")  	        // 세션이 만료된 경우 이동 할 페이지
 }
 ~~~
 
@@ -217,9 +217,9 @@ http.sessionManagement()
 
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
-	http.sessionManagement()
-          .sessionFixation().changeSessionId() // 기본값
-                                                     // none, migrateSession, newSession
+            http.sessionManagement()
+            .sessionFixation().changeSessionId() // 기본값
+                                                 // none, migrateSession, newSession
 }
 ~~~
 
@@ -229,8 +229,8 @@ protected void configure(HttpSecurity http) throws Exception {
 
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
-	http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy. If_Required )
+            http.sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy. If_Required )
 }
 ~~~
 
@@ -240,7 +240,9 @@ protected void configure(HttpSecurity http) throws Exception {
 - SessionCreationPolicy. Stateless        :  스프링 시큐리티가 생성하지 않고 존재해도 사용하지 않음
 
 ## 세션 제어 필터
+
 ![session_management_filter1.png](../images/session_management_filter1.png)
+
 ### SessionManagementFilter의 기능과 역할
 
 1. 세션 관리
@@ -267,33 +269,79 @@ protected void configure(HttpSecurity http) throws Exception {
 + session.isExpired() == true
     + 로그아웃 처리
     + 즉시 오류 페이지 응답 ("This session has been expired")
-    
+
 ![session_management_filter2.png](../images/session_management_filter2.png)
 
 ## 권한 설정 및 표현식
+
 ~~~
 @Override
 protected void configure(HttpSecurity http) throws Exception {
-        http
-        .antMatcher(“/shop/**”)
-        .authorizeRequests()
-        .antMatchers(“/shop/login”, “/shop/users/**”).permitAll()
-	    .antMatchers(“/shop/mypage”).hasRole(“USER”)
-        .antMatchers("/shop/admin/pay").access("hasRole('ADMIN')")
-	    .antMatchers("/shop/admin/**").access("hasRole('ADMIN') or hasRole(‘SYS ')");
-        .anyRequest().authenticated()
+            http
+            .antMatcher(“/shop/**”)
+            .authorizeRequests()
+            .antMatchers(“/shop/login”, “/shop/users/**”).permitAll()
+            .antMatchers(“/shop/mypage”).hasRole(“USER”)
+            .antMatchers("/shop/admin/pay").access("hasRole('ADMIN')")
+            .antMatchers("/shop/admin/**").access("hasRole('ADMIN') or hasRole(‘SYS ')")
+            .anyRequest().authenticated()
 }
 // 주의 사항 - 설정 시 구체적인 경로가 먼저 오고 그것 보다 큰 범위의 경로가 뒤에 오도록 해야 한다
 ~~~
 
 1. 선언적 방식
+
 - URL
     - http.antMatchers("/users/**").hasRole("USER")
 - Method
     - @PreAuthorize(“hasRole(‘USER’)”)
       public void user(){ System.out.println(“user”)}
-      
+
 2. 동적 방식 - DB 연동 프로그래밍
+
 - URI
 - Method
 
+## 예외처리 및 요청 캐시 필터
+
+1. AuthenticationException
+
+- 인증 예외 처리
+    1. AuthenticationEntityPoint 호출
+        - 로그인 페이지 이동, 401 오류 코드 전달 등
+    2. 인증 예외가 발생하기 전의 요청 정보를 저장
+        - RequestCache - 사용자의 이전 요청 정보를 세션에 저장하고 이를 꺼내 오는 캐시 매커니즘
+        - SavedRequest - 사용자가 요청했던 request 파라미터 값들, 그 당시의 헤더값들 등이 저장
+
+2. AccessDeniedException
+
+- 인가 예외처리
+    - AccessDeniedHandler 에서 예외 처리하도록 제공
+
+![exception_translation_filter.png](../images/exception_translation_filter.png)
+~~~
+protected void configure(HttpSecurity http) throws Exception {
+            http.exceptionHandling() 					
+            .authenticationEntryPoint(authenticationEntryPoint())     		// 인증실패 시 처리
+            .accessDeniedHandler(accessDeniedHandler()) 			// 인증실패 시 처리
+}
+~~~
+
+
+## 사이트 간 요청 위조
+![csrf.png](../images/csrf.png)
+1. 로그인 후 쿠키를 발급 받음
+2. 링크를 이용자에게 전달
+3. 링크를 클릭하여 공격용 웹 페이지에 접속
+4. 사용자가 공격용 페이지를 열면, 브라우저는 이미지 파일을 받아오기 위해 공격용 URL을 연다
+5. 사용자의 승인이나 인지 없이 배송지가 등록됨으로써 공격이 완료된다
+
+### CsrfFilter
+- 모든 요청에 랜덤하게 생성된 토큰을 HTTP 파라미터로 요구
+- 요청 시 전달되는 토큰 값과 서버에 저장된 실제 값과 비교한 후 만약 일치하지 않으면 요청은 실패한다
+    - Client
+        - input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        - HTTP 메소드 : PATCH,POST,PUT,DELETE
+    - Spring Security
+        - http.csrf() : 기본 활성화되어 있음
+        - http.csrf().disabled() : 비활성화
