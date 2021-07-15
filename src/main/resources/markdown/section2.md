@@ -98,3 +98,6 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter {
 
 - 최종 응답 시 공통
   - SecurityContextHolder.clearContext()
+  
+## Authentication Flow
+![authentication_flow.png](../images/authentication_flow.png)
