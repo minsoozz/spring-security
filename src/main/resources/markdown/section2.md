@@ -78,3 +78,23 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter {
   - MODE_GLOBAL : 응용 프로그램에서 단 하나의 SecurityContext 를 저장한다.
 - SecurityContextHolder.clearContext() : SecurityContext 기존 정보 초기화
 - Authentication authentication = SecurityContextHolder.getContext().getAuthentication()
+
+## SecurityContextPersistenceFilter
+### SecurityContext 객체의 생성, 저장, 조회
+![security_context_persistence_filter.png](../images/security_context_persistence_filter.png)
+![security_context_persistence_filter2.png](../images/security_context_persistence_filter2.png)
+- 익명 사용자
+  - 새로운 SecurityContext 객체를 생성하여 SecurityContextHolder에 저장
+  - AnonymousAuthenticationFilter 에서 AnonymousAuthentication 객체를 SecurityContext에 저장
+
+- 인증 시
+  - 새로운 SecurityContext 객체를 생성하여 SecurityContextHolder 에 저장
+  - UsernamePasswordAuthenticationFilter 에서 인증 성공 후 SecurityContext 에 UsernamePasswordAuthentication 객체를 SecurityContext 에 저장
+  - 인증이 최종 완료되면 Session 에 SecurityContext 를 저장
+
+- 인증 후
+  - Session 에서 SecurityContext 꺼내어 SecurityContextHolder 에서 저장
+  - SecurityContext 안에 Authentication 객체가 존재하면 계속 인증을 유지한다
+
+- 최종 응답 시 공통
+  - SecurityContextHolder.clearContext()
