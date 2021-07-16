@@ -101,3 +101,8 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter {
   
 ## Authentication Flow
 ![authentication_flow.png](../images/authentication_flow.png)
+
+## AuthenticationManager
+![authentication_manager.png](../images/authentication_manager.png)
+- AuthenticationProvider 목록 중에서 인증 처리 요건에 맞는 AuthenticationProvider 를 찾아 인증처리를 위임한다
+- ProviderManager 를 설정하여 AuthenticationProvider 를 계속 탐색 할 수 있다. 
