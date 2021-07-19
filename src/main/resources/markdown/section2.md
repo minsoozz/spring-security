@@ -7,8 +7,8 @@
     - 실제 보안처리를 하지 않음
     
 ## FilterChainProxy
-- springSecurityFilterChain의 이름으로 생성되는 필터 빈
-- DelegatingFilterProxy으로 부터 요청을 위임 받고 실제 보안 처리
+- springSecurityFilterChain 의 이름으로 생성되는 필터 빈
+- DelegatingFilterProxy 으로 부터 요청을 위임 받고 실제 보안 처리
 - 스프링 시큐리티 초기화 시 생성되는 필터들을 관리하고 제어
     - 스프링 시큐리티가 기본적으로 생성하는 필터
     - 설정 클래스에서 API 추가 시 생성되는 필터
@@ -47,8 +47,8 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter {
     - http.antMatcher("/admin")
     
 - 설정 클래스 별로 필터가 생성
-- FilterChainProxy가 각 필터를 가지고 있음
-- 요청에 따라 RequestMatch와 매칭되는 필터가 작동하도록 함
+- FilterChainProxy 가 각 필터를 가지고 있음
+- 요청에 따라 RequestMatch 와 매칭되는 필터가 작동하도록 함
 
 ## Authentication
 ![authentication.png](../images/authentication.png)
@@ -121,4 +121,35 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter {
 
 ## FilterSecurityInterceptor.png
 ![filter_security_interceptor.png](../images/filter_security_interceptor.png)
+
+## AccessDecisionManager, AccessDecisionVoter
+![access_decision_manager.png](../images/access_decision_manager.png)
+
+### AccessDecisionManager
+- 인증 정보, 요청 정보, 권한 정보를 이용해서 사용자의 자원접근을 허용할 것인지 거부할 것인지를 최종 결정하는 주체
+- 여러 개의 Voter 들을 가질 수 있으며 Voter 들로부터 접근허용,거부,보류에 해당하는 각각의 값을 리턴 받고 판단 및 결정
+- 최종 접근 거부 시 예외 발생
+
+- 접근 결정의 세가지 유형
+  - AffirmativeBased
+    - 여러개의 Voter 클래스 중 하나라도 접근 허가로 결론을 내면 접근 허가로 판단한다
+  - ConsensusBased
+    - 다수표(승인 및 거부)에 의해 최종 결정을 판단한다
+    - 동수일 경우 기본 접근은 허가이나 allowIfEqualGrantedDeniedDecisions 을 false 로 설정할 경우 접근 거부로 결정된다
+  - UnanimousBased
+    - 모든 Voter 가 만장일치로 접근을 숭인해야 하며 그렇지 않은 경우 접근을 거부한다
   
+### AccessDecisionVoter
+>판단을 심사하는 것(위원)
+
+- Voter 가 권한 부여 과정에서 판단하는 자료
+  - Authentication :  인증 정보(user)
+  - FilterInvocation : 요청 정보 (antMatcher("/user"))
+  - ConfigAttributes : 권한 정보 (hasRole("USER"))
+
+- 결정 방식
+  - ACCESS_GRANTED : 접근허용(1)
+  - ACCESS_DENIED : 접근 거부(0)
+  - ACCESS_ABSTAIN : 접근 보류(-1)
+      -Voter 가 해당 타입의 요청에 대해 결정을 내릴 수 없는 경우
+
