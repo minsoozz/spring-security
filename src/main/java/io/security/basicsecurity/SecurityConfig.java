@@ -13,23 +13,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   protected void configure(HttpSecurity http) throws Exception {
     http
-        .antMatcher("/admin/**")
         .authorizeRequests()
-        .anyRequest().authenticated()
-        .and()
-        .httpBasic();
-  }
-}
+        .antMatchers("/user").hasRole("USER")
+        .anyRequest().permitAll();
 
-@Configuration
-@Order(1)
-class SecurityConfig2 extends WebSecurityConfigurerAdapter {
-
-  protected void configure(HttpSecurity http) throws Exception {
     http
-        .authorizeRequests()
-        .anyRequest().permitAll()
-        .and()
         .formLogin();
   }
 }
+

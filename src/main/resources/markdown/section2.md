@@ -1,4 +1,4 @@
-#스프링 시큐리티 주요 아키텍처 이해
+# 스프링 시큐리티 주요 아키텍처 이해
 ## DelegatingFilterProxy
 ![delegating_filter_proxy_filter_chain_proxy.png](../images/delegating_filter_proxy_filter_chain_proxy.png)
 - 서블릿 필터는 스프링에서 정의된 빈을 주입해서 사용할 수 없음
@@ -84,8 +84,8 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter {
 ![security_context_persistence_filter.png](../images/security_context_persistence_filter.png)
 ![security_context_persistence_filter2.png](../images/security_context_persistence_filter2.png)
 - 익명 사용자
-  - 새로운 SecurityContext 객체를 생성하여 SecurityContextHolder에 저장
-  - AnonymousAuthenticationFilter 에서 AnonymousAuthentication 객체를 SecurityContext에 저장
+  - 새로운 SecurityContext 객체를 생성하여 SecurityContextHolder 에 저장
+  - AnonymousAuthenticationFilter 에서 AnonymousAuthentication 객체를 SecurityContext 에 저장
 
 - 인증 시
   - 새로운 SecurityContext 객체를 생성하여 SecurityContextHolder 에 저장
@@ -106,3 +106,19 @@ class SecurityConfig2 extends WebSecurityConfigurerAdapter {
 ![authentication_manager.png](../images/authentication_manager.png)
 - AuthenticationProvider 목록 중에서 인증 처리 요건에 맞는 AuthenticationProvider 를 찾아 인증처리를 위임한다
 - ProviderManager 를 설정하여 AuthenticationProvider 를 계속 탐색 할 수 있다. 
+
+## AuthenticationProvider
+![authentication_provider.png](../images/authentication_provider.png)
+
+## Authorization
+![authorization.png](../images/authorization.png)
+>당신에게 무엇이 허가 되었는지 증명하는 것
+- 마지막에 위치한 필터로써 인증된 사용자에 대하여 특정 요청의 승인/거부 여부를 최종적으로 결정
+- 인증 객체 없이 보호자원에 접근을 시도할 경우 AuthenticationException 을 발생
+- 인증 후 자원에 접근 가능한 권한이 존재하지 않을 경우 AccessDeniedException 을 발생
+- 권한 제어 방식 중 HTTP 자원의 보안을 처리하는 필터
+- 권한 처리를 AccessDecisionManager 에게 맡김
+
+## FilterSecurityInterceptor.png
+![filter_security_interceptor.png](../images/filter_security_interceptor.png)
+  
