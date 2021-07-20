@@ -319,6 +319,7 @@ protected void configure(HttpSecurity http) throws Exception {
     - AccessDeniedHandler 에서 예외 처리하도록 제공
 
 ![exception_translation_filter.png](../images/exception_translation_filter.png)
+
 ~~~
 protected void configure(HttpSecurity http) throws Exception {
             http.exceptionHandling() 					
@@ -327,9 +328,10 @@ protected void configure(HttpSecurity http) throws Exception {
 }
 ~~~
 
-
 ## 사이트 간 요청 위조
+
 ![csrf.png](../images/csrf.png)
+
 1. 로그인 후 쿠키를 발급 받음
 2. 링크를 이용자에게 전달
 3. 링크를 클릭하여 공격용 웹 페이지에 접속
@@ -337,6 +339,7 @@ protected void configure(HttpSecurity http) throws Exception {
 5. 사용자의 승인이나 인지 없이 배송지가 등록됨으로써 공격이 완료된다
 
 ### CsrfFilter
+
 - 모든 요청에 랜덤하게 생성된 토큰을 HTTP 파라미터로 요구
 - 요청 시 전달되는 토큰 값과 서버에 저장된 실제 값과 비교한 후 만약 일치하지 않으면 요청은 실패한다
     - Client
